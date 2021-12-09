@@ -25,14 +25,8 @@ module.exports = {
         }
     },
     signIn: (req, res) => {
-        const {firstName, lastName, userName, email, password, confirmPassword} = req.body;
 
-        sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
-                              VALUES (${firstName}, ${lastName}, ${userName}, ${email}, ${passHash})`)
-            .then(dbRes => {
-                res.status(200).send(dbRes[0])
-            })
-            .catch(err => console.log(err))
+        const {firstName, lastName, userName, email, password, confirmPassword} = req.body;
 
         let salt = bcrypt.genSaltSync(5)
         let passHash = bcrypt.hashSync(password, salt)
@@ -49,8 +43,14 @@ module.exports = {
         }
         globalId++;
 
+        sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+            .then(dbRes => {
+                res.status(200).send(dbRes[0])
+            })
+            .catch(err => console.log(err))
+
         userArray.push(userObj)
         console.log(userObj)
-        res.status(200).send(userObj)
     }
 }
