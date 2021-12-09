@@ -1,42 +1,5 @@
-
-const loginBtn = document.getElementById('login-button')
-const loginUser = document.getElementById('login-username')
-const loginPass = document.getElementById('login-password')
 const signInBtn = document.getElementById('form')
-
-
-
-const baseURL = 'http://localhost:5432/password-manager'
-
-const login = () =>{
-    axios.post(baseURL)
-        .then((request)=>{
-            console.log(request.data)
-            console.log("success")
-            loginLink()
-        }).catch(error => {
-            console.log(error)
-            alert("Sorry Wrong username or password")
-    })
-}
-
-function loginLink () {
-    let x = prompt('click')
-    let testWindow = window.open('user.html', '_self');
-    testWindow.addEventListener('click', login)
-}
-
-const loginHandler = (e) =>{
-    e.preventDefault()
-    let userObj = {
-        loginUser: loginUser.value,
-        loginPass: loginPass.value
-    }
-
-    login(userObj)
-}
-
-loginBtn.addEventListener('click', login)
+const baseURL = `http://localhost:5432/password-manager`
 
 const signIn = (body) => {
     console.log(body)
@@ -57,7 +20,6 @@ const signInHandler = (e) => {
     let email = document.getElementById('form-email')
     let password = document.getElementById('form-password')
     let confirmPassword = document.getElementById('form-confirm')
-    let actual;
 
     if(password.value !== confirmPassword.value){
         alert("wrong password")

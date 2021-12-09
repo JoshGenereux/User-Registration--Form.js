@@ -1,6 +1,7 @@
 require('dotenv')
 const {CONNECTION_STRING: CS} = process.env;
 const Sequelize = require('sequelize')
+const bcrypt = require('bcrypt')
 const sequelize = new Sequelize(CS, {
     dialect: 'postgres',
     dialectOptions: {
@@ -9,23 +10,9 @@ const sequelize = new Sequelize(CS, {
         }
     }
 })
-const userArray = require('./db.json')
-const bcrypt = require('bcrypt')
-let globalId = 2;
 
 module.exports = {
-    login: (req, res) => {
-        const {userName, passWord} = req.body
-
-        for(let i = 0; i < userArray.length; i++){
-            if(userArray.includes(userName)){
-                res.status(200).send(userArray[i])
-                console.log(userArray)
-            }
-        }
-    },
     signIn: (req, res) => {
-
         const {firstName, lastName, userName, email, password, confirmPassword} = req.body;
 
         let salt = bcrypt.genSaltSync(5)
@@ -33,7 +20,6 @@ module.exports = {
         let confirmPassHash = bcrypt.hashSync(confirmPassword, salt)
 
         let userObj = {
-            id: globalId,
             firstName,
             lastName,
             userName,
@@ -41,16 +27,37 @@ module.exports = {
             passHash,
             confirmPassHash
         }
-        globalId++;
 
-        sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
-                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
-            .then(dbRes => {
-                res.status(200).send(dbRes[0])
+        let userDb;
+
+        sequelize.query('SELECT * FROM users')
+            .then((dbRes)=>{
+                userDb = dbRes[0];
+                console.log(userDb)
+                queryHandler(userDb)
+                // res.status(200).send(dbRes)
             })
-            .catch(err => console.log(err))
 
-        userArray.push(userObj)
+        function queryHandler (array) {
+            for(let i = 0; i < array.length; i++) {
+                if (!array.includes(email, userName)) {
+                    sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+                        .then(dbRes => {
+                            res.status(200).send(dbRes[0])
+                        })
+                    .catch(err => console.log(err))
+                }
+            }
+            // if (!array.includes(email, userName)) {
+            //     sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+            //                   VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+            //         .then(dbRes => {
+            //             res.status(200).send(dbRes[0])
+            //         })
+            //     .catch(err => console.log(err))
+            // }
+        }
         console.log(userObj)
     }
 }
