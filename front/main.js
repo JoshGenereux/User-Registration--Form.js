@@ -40,7 +40,7 @@ const signIn = (body) => {
     console.log(body)
     axios.post(`${baseURL}/sign-in`, body)
         .then((res)=>{
-            console.log(res.body)
+            console.log(res.data)
         })
         .catch(err => {console.log(err)})
 }
