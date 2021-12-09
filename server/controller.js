@@ -35,16 +35,15 @@ module.exports = {
                 userDb = dbRes[0];
                 console.log(userDb)
                 queryHandler(userDb)
-                // res.status(200).send(dbRes)
             })
 
         function queryHandler (array) {
-            for(let i = 0; i < array.length; i++) {
+            for(let i = 0; i < array[0].length; i++) {
                 if (!array.includes(email, userName)) {
                     sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
                               VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
                         .then(dbRes => {
-                            res.status(200).send(dbRes[0])
+                            res.status(200).send(array)
                         })
                     .catch(err => console.log(err))
                 }
