@@ -1,7 +1,7 @@
 const loginBtn = document.getElementById('login-button')
-const signUpBtn = document.getElementById('sign-up-button')
 const loginUser = document.getElementById('login-username')
 const loginPass = document.getElementById('login-password')
+const signInBtn = document.getElementById('form')
 
 
 const baseURL = 'http://localhost:4000/password-manager'
@@ -34,18 +34,20 @@ const loginHandler = (e) =>{
     login(userObj)
 }
 
+loginBtn.addEventListener('click', login)
+
 const signIn = (body) => {
-    axios.post(`${baseURL}`, body)
+    console.log(body)
+    axios.post(`${baseURL}/sign-in`, body)
         .then((res)=>{
-            console.log(res)
+            console.log(res.body)
         })
         .catch(err => {console.log(err)})
 }
-loginBtn.addEventListener('click', login)
-signUpBtn.addEventListener('click', signIn)
 
 const signInHandler = (e) => {
     e.preventDefault()
+    console.log(e.target)
 
     let firstName = document.getElementById('form-name')
     let lastName = document.getElementById('form-lastname')
@@ -58,7 +60,7 @@ const signInHandler = (e) => {
         firstName: firstName.value,
         lastName: lastName.value,
         userName: userName.value,
-        email: email.vallue,
+        email: email.value,
         password: password.value,
         confirmPassword: confirmPassword.value
     }
@@ -72,6 +74,8 @@ const signInHandler = (e) => {
     password.value = '';
     confirmPassword.value = '';
 }
+
+signInBtn.addEventListener('submit', signInHandler)
 
 
 
