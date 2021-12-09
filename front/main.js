@@ -57,23 +57,27 @@ const signInHandler = (e) => {
     let email = document.getElementById('form-email')
     let password = document.getElementById('form-password')
     let confirmPassword = document.getElementById('form-confirm')
+    let actual;
 
-    let bodyObj = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        userName: userName.value,
-        email: email.value,
-        password: password.value,
-        confirmPassword: confirmPassword.value
+    if(password.value !== confirmPassword.value){
+        alert("wrong password")
+    } else {
+        let bodyObj = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            userName: userName.value,
+            email: email.value,
+            password: password.value,
+            confirmPassword: confirmPassword.value
+        }
+        signIn(bodyObj)
+        firstName.value = '';
+        lastName.value = '';
+        userName.value = '';
+        email.value = '';
+        password.value = '';
+        confirmPassword.value = '';
     }
-
-    signIn(bodyObj)
-
-    firstName.value = '';
-    lastName.value = '';
-    userName.value = '';
-    email.value = '';
-    password.value = '';
     confirmPassword.value = '';
 }
 
