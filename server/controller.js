@@ -30,13 +30,25 @@ module.exports = {
 
         let userDb;
 
-        sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
-                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+        sequelize.query('SELECT * FROM users;')
             .then(dbRes => {
-                res.status(200).send(dbRes[0])
+                userDb = dbRes[0]
+                for(let i = 0; i < userDb.length; i++){
+                    for(const prop in userDb[i]){
+                        console.log(`${prop}: ${userDb[0][prop]}`)
+                        if(email === userDb[i][prop]){
+                            console.log(email)
+                        }
+                    }
+                }
             })
-            .catch(err => console.log(err))
+        // sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+        //                       VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+        //     .then(dbRes => {
+        //         res.status(200).send(dbRes[0])
+        //     })
+        //     .catch(err => console.log(err))
 
-        console.log(userObj)
+        // console.log(userObj)
     }
 }
