@@ -2,7 +2,6 @@ const signInBtn = document.getElementById('form')
 const baseURL = `http://localhost:5432/password-manager`
 
 const signIn = (body) => {
-    console.log(body)
     axios.post(`${baseURL}/sign-in`, body)
         .then((res)=>{
             console.log(res.data)
