@@ -6,7 +6,7 @@ const signIn = (body) => {
         .then((res)=>{
             console.log(res.data)
         })
-        .catch(err => {console.log(err)})
+        .catch(err => {console.log(err, "user already exists")})
 }
 
 const signInHandler = (e) => {

@@ -11,13 +11,14 @@ const sequelize = new Sequelize(CS, {
     }
 })
 
+
 module.exports = {
     signIn: (req, res) => {
-        const {firstName, lastName, userName, email, password, confirmPassword} = req.body;
+        const {firstName, lastName, userName, email, password} = req.body;
 
         let salt = bcrypt.genSaltSync(5)
         let passHash = bcrypt.hashSync(password, salt)
-        let confirmPassHash = bcrypt.hashSync(confirmPassword, salt)
+        // let confirmPassHash = bcrypt.hashSync(confirmPassword, salt)
 
         let userObj = {
             firstName,
@@ -25,30 +26,26 @@ module.exports = {
             userName,
             email,
             passHash,
-            confirmPassHash
+            // confirmPassHash
         }
 
-        let userDb;
-
-        sequelize.query('SELECT * FROM users;')
-            .then(dbRes => {
-                userDb = dbRes[0]
-                for(let i = 0; i < userDb.length; i++){
-                    for(const prop in userDb[i]){
-                        console.log(`${prop}: ${userDb[0][prop]}`)
-                        if(email === userDb[i][prop]){
-                            console.log(email)
-                        }
-                    }
+        sequelize.query(`SELECT * FROM users WHERE email = '${email}'`)
+            .then((dbRes)=>{
+                if(dbRes[0] === email){
+                    res.status(400)
+                    console.log("user already exists")
+                } else {
+                    sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+                        .then(dbRes => {
+                             res.status(200).send(dbRes[0])
+                         })
+                         .catch(err => console.log(err))
                 }
             })
-        // sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
-        //                       VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
-        //     .then(dbRes => {
-        //         res.status(200).send(dbRes[0])
-        //     })
-        //     .catch(err => console.log(err))
+            .catch(err=> console.log(err))
 
-        // console.log(userObj)
+
+        console.log(userObj)
     }
 }
