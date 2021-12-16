@@ -12,7 +12,7 @@ app.get('/', (req,res)=>{
     res.sendfile(path.join(__dirname, '/front/welcome-page.html'))
 })
 
-app.post('/password-manager/sign-in', ctrl.signIn);
+// app.post('/password-manager/sign-in', ctrl.signIn);
 
 const port = process.env.PORT || SP
 
