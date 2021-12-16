@@ -8,5 +8,25 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.12.0-beta.1"
-  }
+  },
+  "name": "user-registration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshGenereux/User-Registration--Form.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoshGenereux/User-Registration--Form.js/issues"
+  },
+  "homepage": "https://github.com/JoshGenereux/User-Registration--Form.js#readme",
+  "description": ""
 }

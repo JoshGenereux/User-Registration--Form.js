@@ -18,7 +18,6 @@ module.exports = {
 
         let salt = bcrypt.genSaltSync(5)
         let passHash = bcrypt.hashSync(password, salt)
-        // let confirmPassHash = bcrypt.hashSync(confirmPassword, salt)
 
         let userObj = {
             firstName,
@@ -26,24 +25,31 @@ module.exports = {
             userName,
             email,
             passHash,
-            // confirmPassHash
         }
 
-        sequelize.query(`SELECT * FROM users WHERE email = '${email}'`)
-            .then((dbRes)=>{
-                if(dbRes[0] === email){
-                    res.status(400)
-                    console.log("user already exists")
-                } else {
-                    sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
-                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
-                        .then(dbRes => {
-                             res.status(200).send(dbRes[0])
-                         })
-                         .catch(err => console.log(err))
-                }
+        sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+                              VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')
+                              ON CONFLICT (email) 
+                              SELECT * FROM users;`)
+            .then(dbRes => {
+                res.status(200).send(dbRes[0])
             })
-            .catch(err=> console.log(err))
+            .catch(err => console.log(err))
+
+
+
+        // sequelize.query(`SELECT * FROM users WHERE email = '${email}'`)
+        //     .then((dbRes)=>{
+        //         res.status(200).send(dbRes[0])
+        //     })
+        //     .catch(err=> console.log(err))
+
+        // sequelize.query(`INSERT INTO users (first_name, last_name, user_name, email, password)
+        //                       VALUES ('${firstName}', '${lastName}', '${userName}', '${email}', '${passHash}')`)
+        //     .then(dbRes => {
+        //         res.status(200).send(dbRes[0])
+        //     })
+        //     .catch(err => console.log(err))
 
 
         console.log(userObj)
